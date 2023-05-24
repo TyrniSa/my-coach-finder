@@ -8,7 +8,7 @@
 footer {
   width: 100%;
   height: 2rem;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   background-color: #3d008d;
   display: flex;
