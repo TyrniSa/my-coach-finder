@@ -1,29 +1,32 @@
 <template>
-  <TheNavigation />
-  <main>
-    <RouterView />
-  </main>
+  <TheHeader />
+  <RouterView />
+  <TheFooter />
 </template>
 
 <script>
 import { RouterView } from "vue-router";
-import TheNavigation from "./components/nav/TheNavigation.vue";
+import TheHeader from "./components/nav/TheHeader.vue";
+import TheFooter from "./components/nav/TheFooter.vue";
 
 export default {
   components: {
-    TheNavigation,
+    TheHeader,
     RouterView,
+    TheFooter,
   },
 };
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Wix+Madefor+Display&display=swap");
+
 * {
   box-sizing: border-box;
 }
 
 html {
-  font-family: sans-serif;
+  font-family: "Wix Madefor Display", sans-serif;
 }
 
 body {
