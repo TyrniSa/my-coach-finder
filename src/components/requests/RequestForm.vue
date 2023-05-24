@@ -11,7 +11,9 @@
     </div>
     <div class="actions">
       <BaseButton>Send Message</BaseButton>
-      <p class="errors" v-if="!formIsValid">Please check your email and message!</p>
+      <p class="errors" v-if="!formIsValid">
+        Please check your email and message!
+      </p>
     </div>
   </form>
 </template>
@@ -42,11 +44,13 @@ export default {
       }
 
       const formData = {
-        first: this.email,
-        email: this.message,
+        coachId: this.$route.params.id,
+        email: this.email,
+        message: this.message,
       };
 
-      console.log(formData);
+      this.$store.dispatch("requests/contactCoach", formData);
+      this.$router.replace("/coaches");
     },
   },
 };
