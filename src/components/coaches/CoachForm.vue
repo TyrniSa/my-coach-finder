@@ -1,52 +1,94 @@
 <template>
   <form @submit.prevent="submitForm">
-    <div class="form-control">
+    <div class="form-control" :class="{ invalid: !firstName.isValid }">
       <label for="firstname">First name</label>
-      <input type="text" id="firstname" v-model.trim="firstName" />
+      <input
+        type="text"
+        id="firstname"
+        v-model.trim="firstName.val"
+        @blur="clearValidity('firstName')"
+      />
+      <p v-if="!firstName.isValid">Please input a name!</p>
     </div>
-    <div class="form-control">
+    <div class="form-control" :class="{ invalid: !lastName.isValid }">
       <label for="lastname">Last name</label>
-      <input type="text" id="lastname" v-model.trim="lastName" />
+      <input
+        type="text"
+        id="lastname"
+        v-model.trim="lastName.val"
+        @blur="clearValidity('lastName')"
+      />
+      <p v-if="!lastName.isValid">Please input a name!</p>
     </div>
-    <div class="form-control">
+    <div class="form-control" :class="{ invalid: !description.isValid }">
       <label for="description">Description</label>
-      <textarea id="description" rows="5" v-model.trim="description"></textarea>
+      <textarea
+        id="description"
+        rows="5"
+        v-model.trim="description.val"
+        @blur="clearValidity('description')"
+      ></textarea>
+      <p v-if="!description.isValid">
+        Please give a description of yourself and your skills!
+      </p>
     </div>
-    <div class="form-control">
+    <div class="form-control" :class="{ invalid: !rate.isValid }">
       <label for="rate">Hourly rate</label>
-      <input type="number" id="rate" v-model.number="rate" />
+      <input
+        type="number"
+        id="rate"
+        v-model.number="rate.val"
+        @blur="clearValidity('rate')"
+      />
+      <p v-if="!rate.isValid">
+        Please insert your rate, rate can't be negative!
+      </p>
     </div>
-    <div class="form-control">
+    <div class="form-control" :class="{ invalid: !areas.isValid }">
       <h3>Areas of Expertise</h3>
       <div>
-        <label class="container" for="frontend">Frontend
-          <input type="checkbox" id="frontend" value="frontend" v-model="areas" />
+        <label class="container" for="frontend"
+          >Frontend
+          <input
+            type="checkbox"
+            id="frontend"
+            value="frontend"
+            v-model="areas.val"
+            @blur="clearValidity('areas')"
+          />
           <span class="checkmark"></span>
         </label>
 
-        <label class="container" for="backend">Backend
-          <input type="checkbox" id="backend" value="backend" v-model="areas" />
+        <label class="container" for="backend"
+          >Backend
+          <input
+            type="checkbox"
+            id="backend"
+            value="backend"
+            v-model="areas.val"
+            @blur="clearValidity('areas')"
+          />
           <span class="checkmark"></span>
         </label>
 
-        <label class="container" for="career">Career Advisory
-          <input type="checkbox" id="career" value="career" v-model="areas" />
+        <label class="container" for="career"
+          >Career Advisory
+          <input
+            type="checkbox"
+            id="career"
+            value="career"
+            v-model="areas.val"
+            @blur="clearValidity('areas')"
+          />
           <span class="checkmark"></span>
         </label>
-
-        <!-- <input type="checkbox" id="frontend" value="frontend" v-model="areas" />
-        <label for="frontend">Frontend development</label>
-      </div>
-      <div>
-        <input type="checkbox" id="backend" value="backend" v-model="areas" />
-        <label for="backend">Backend development</label>
-      </div>
-      <div>
-        <input type="checkbox" id="career" value="career" v-model="areas" />
-        <label for="career">Career Advisory</label> -->
+        <p v-if="!areas.isValid">Please select at least one expertise!</p>
       </div>
     </div>
     <BaseButton>Register</BaseButton>
+    <p v-if="!formIsValid">
+      There were some errors, please check your input and try again!
+    </p>
   </form>
 </template>
 
@@ -54,26 +96,76 @@
 import BaseButton from "../ui/BaseButton.vue";
 
 export default {
+  emits: ["save-data"],
   components: { BaseButton },
   data() {
     return {
-      firstName: "",
-      lastName: "",
-      description: "",
-      rate: null,
-      areas: [],
+      firstName: {
+        val: "",
+        isValid: true,
+      },
+      lastName: {
+        val: "",
+        isValid: true,
+      },
+      description: {
+        val: "",
+        isValid: true,
+      },
+      rate: {
+        val: null,
+        isValid: true,
+      },
+      areas: {
+        val: [],
+        isValid: true,
+      },
+      formIsValid: true,
     };
   },
   methods: {
+    clearValidity(input) {
+      this[input].isValid = true;
+    },
+    validateForm() {
+      this.formIsValid = true;
+
+      if (this.firstName.val === "") {
+        this.firstName.isValid = false;
+        this.formIsValid = false;
+      }
+      if (this.lastName.val === "") {
+        this.lastName.isValid = false;
+        this.formIsValid = false;
+      }
+      if (this.description.val === "") {
+        this.description.isValid = false;
+        this.formIsValid = false;
+      }
+      if (!this.rate.val || this.rate.val < 0) {
+        this.rate.isValid = false;
+        this.formIsValid = false;
+      }
+      if (this.areas.val.length === 0) {
+        this.areas.isValid = false;
+        this.formIsValid = false;
+      }
+    },
     submitForm() {
+      this.validateForm();
+      if (!this.formIsValid) {
+        return;
+      }
+
       const formData = {
-        first: this.firstName,
-        last: this.lastName,
-        desc: this.description,
-        rate: this.rate,
-        areas: this.areas,
+        first: this.firstName.val,
+        last: this.lastName.val,
+        desc: this.description.val,
+        rate: this.rate.val,
+        areas: this.areas.val,
       };
-      console.log(formData);
+
+      this.$emit("save-data", formData);
     },
   },
 };
@@ -110,16 +202,6 @@ textarea:focus {
   outline: none;
   border-color: #3d008d;
 }
-
-/* input[type="checkbox"] {
-  display: inline;
-  width: auto;
-  border: none;
-}
-
-input[type="checkbox"]:focus {
-  outline: #3d008d solid 1px;
-} */
 
 h3 {
   margin: 0.5rem 0;
@@ -183,10 +265,10 @@ h3 {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
-.invalid label {
+.invalid label,
+.invalid h3 {
   color: red;
 }
-
 .invalid input,
 .invalid textarea {
   border: 1px solid red;
