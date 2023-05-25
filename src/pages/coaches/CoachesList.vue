@@ -1,33 +1,41 @@
 <template>
-  <base-dialog :show="!!error" title="An error occurred!" @close="handleError">
-    <p>{{ error }}</p>
-  </base-dialog>
-  <section><CoachFilter @change-filter="setFilters" /></section>
-  <section>
-    <BaseCard>
-      <div class="controls">
-        <BaseButton mode="outline" @click="loadCoaches">Refresh</BaseButton>
-        <BaseButton v-if="!isCoach && !isLoading" link to="/register"
-          >Register as Coach</BaseButton
-        >
-      </div>
-      <div v-if="isLoading"><BaseSpinner /></div>
-      <ul v-else-if="hasCoaches">
-        <CoachItem
-          v-for="coach in filteredCoaches"
-          :key="coach.id"
-          :id="coach.id"
-          :firstName="coach.firstName"
-          :lastName="coach.lastName"
-          :rate="coach.hourlyRate"
-          :areas="coach.areas"
-        >
-          {{ coach }}
-        </CoachItem>
-      </ul>
-      <h3 v-else>No coaches yet!</h3>
-    </BaseCard>
-  </section>
+  <div>
+    <base-dialog
+      :show="!!error"
+      title="An error occurred!"
+      @close="handleError"
+    >
+      <p>{{ error }}</p>
+    </base-dialog>
+    <section><CoachFilter @change-filter="setFilters" /></section>
+    <section>
+      <BaseCard>
+        <div class="controls">
+          <BaseButton mode="outline" @click="loadCoaches(true)"
+            >Refresh</BaseButton
+          >
+          <BaseButton v-if="!isCoach && !isLoading" link to="/register"
+            >Register as Coach</BaseButton
+          >
+        </div>
+        <div v-if="isLoading"><BaseSpinner /></div>
+        <ul v-else-if="hasCoaches">
+          <CoachItem
+            v-for="coach in filteredCoaches"
+            :key="coach.id"
+            :id="coach.id"
+            :firstName="coach.firstName"
+            :lastName="coach.lastName"
+            :rate="coach.hourlyRate"
+            :areas="coach.areas"
+          >
+            {{ coach }}
+          </CoachItem>
+        </ul>
+        <h3 v-else>No coaches yet!</h3>
+      </BaseCard>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -86,18 +94,20 @@ export default {
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters;
     },
-    async loadCoaches() {
+    async loadCoaches(refresh = false) {
       this.isLoading = true;
       try {
-        await this.$store.dispatch("coaches/loadCoaches");
+        await this.$store.dispatch("coaches/loadCoaches", {
+          forceRefresh: refresh,
+        });
       } catch (error) {
         this.error = error.message || "Something went wrong, try again later!";
       }
       this.isLoading = false;
     },
-    handleError(){
+    handleError() {
       this.error = null;
-    }
+    },
   },
 };
 </script>
