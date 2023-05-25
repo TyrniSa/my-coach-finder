@@ -1,12 +1,18 @@
 <template>
+  <base-dialog :show="!!error" title="An error occurred!" @close="handleError">
+    <p>{{ error }}</p>
+  </base-dialog>
   <section><CoachFilter @change-filter="setFilters" /></section>
   <section>
     <BaseCard>
       <div class="controls">
-        <BaseButton mode="outline">Refresh</BaseButton>
-        <BaseButton v-if="!isCoach" link to="/register">Register as Coach</BaseButton>
+        <BaseButton mode="outline" @click="loadCoaches">Refresh</BaseButton>
+        <BaseButton v-if="!isCoach && !isLoading" link to="/register"
+          >Register as Coach</BaseButton
+        >
       </div>
-      <ul v-if="hasCoaches">
+      <div v-if="isLoading"><BaseSpinner /></div>
+      <ul v-else-if="hasCoaches">
         <CoachItem
           v-for="coach in filteredCoaches"
           :key="coach.id"
@@ -29,6 +35,7 @@ import BaseCard from "@/components/ui/BaseCard.vue";
 import CoachItem from "../../components/coaches/CoachItem.vue";
 import BaseButton from "@/components/ui/BaseButton.vue";
 import CoachFilter from "@/components/coaches/CoachFilter.vue";
+import BaseSpinner from "@/components/ui/BaseSpinner.vue";
 
 export default {
   components: {
@@ -36,9 +43,12 @@ export default {
     BaseCard,
     BaseButton,
     CoachFilter,
+    BaseSpinner,
   },
   data() {
     return {
+      isLoading: false,
+      error: null,
       activeFilters: {
         frontend: true,
         backend: true,
@@ -66,13 +76,28 @@ export default {
       });
     },
     hasCoaches() {
-      return this.$store.getters["coaches/hasCoaches"];
+      return !this.isLoading && this.$store.getters["coaches/hasCoaches"];
     },
+  },
+  created() {
+    this.loadCoaches();
   },
   methods: {
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters;
     },
+    async loadCoaches() {
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch("coaches/loadCoaches");
+      } catch (error) {
+        this.error = error.message || "Something went wrong, try again later!";
+      }
+      this.isLoading = false;
+    },
+    handleError(){
+      this.error = null;
+    }
   },
 };
 </script>

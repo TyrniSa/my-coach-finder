@@ -1,3 +1,6 @@
+import axios from "axios";
+const URLbase = process.env.VUE_APP_BDBASE;
+
 export default {
   namespaced: true,
   state() {
@@ -28,11 +31,14 @@ export default {
     registerCoach(state, payload) {
       state.coaches.push(payload);
     },
+    setCoaches(state, payload) {
+      state.coaches = payload;
+    },
   },
   actions: {
-    registerCoach(context, data) {
+    async registerCoach(context, data) {
+      const userId = context.rootGetters.userId;
       const coachData = {
-        id: context.rootGetters.userId,
         firstName: data.first,
         lastName: data.last,
         description: data.desc,
@@ -40,7 +46,44 @@ export default {
         areas: data.areas,
       };
 
-      context.commit("registerCoach", coachData);
+      try {
+        const response = await axios.put(`${URLbase}/coaches/${userId}.json`, {
+          coachData,
+        });
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+
+      context.commit("registerCoach", { ...coachData, id: userId });
+    },
+    async loadCoaches(context) {
+      const response = await axios.get(`${URLbase}/coaches.json`);
+      console.log(response);
+
+      const responseData = await response.data;
+
+      if (response.status !== 200) {
+        const error = new Error(responseData.message || "Failed to fetch!");
+        throw error;
+      }
+
+      const coaches = [];
+
+      for (const key in responseData) {
+        const coach = {
+          id: key,
+          firstName: responseData[key].coachData.firstName,
+          lastName: responseData[key].coachData.lastName,
+          description: responseData[key].coachData.description,
+          hourlyRate: responseData[key].coachData.hourlyRate,
+          areas: responseData[key].coachData.areas,
+        };
+
+        coaches.push(coach);
+      }
+
+      context.commit("setCoaches", coaches);
     },
   },
   getters: {
