@@ -71,4 +71,8 @@ export default {
 <style scoped>
 .contacting{
   display:none;
-}</style>
+}
+p{
+  text-align: justify;
+}
+</style>
