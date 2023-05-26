@@ -10,7 +10,7 @@
       <textarea id="message" rows="5" v-model.trim="message"></textarea>
     </div>
     <div class="actions">
-      <BaseButton>Send Message</BaseButton>
+      <BaseButton>Send Message ✉️</BaseButton>
       <p class="errors" v-if="!formIsValid">
         Please check your email and message!
       </p>

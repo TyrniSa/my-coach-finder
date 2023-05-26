@@ -3,8 +3,15 @@
     <section>
       <BaseCard>
         <h2>{{ fullName }}</h2>
-        <h3>${{ rate }}/hour</h3></BaseCard
-      >
+        <h3>${{ rate }}/hour</h3>
+        <BaseBadge
+          v-for="area in areas"
+          :key="area.id"
+          :type="area"
+          :title="area"
+        ></BaseBadge>
+        <p>{{ description }}</p>
+        </BaseCard>
     </section>
     <section>
       <BaseCard>
@@ -15,17 +22,7 @@
         <RouterView></RouterView>
       </BaseCard>
     </section>
-    <section>
-      <BaseCard>
-        <BaseBadge
-          v-for="area in areas"
-          :key="area.id"
-          :type="area"
-          :title="area"
-        ></BaseBadge>
-        <p>{{ description }}</p>
-      </BaseCard>
-    </section>
+
   </div>
 </template>
 

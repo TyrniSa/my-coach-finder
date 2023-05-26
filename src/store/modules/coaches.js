@@ -53,10 +53,9 @@ export default {
       const token = context.rootGetters.token;
 
       try {
-        const response = await axios.put(`${URLbase}/coaches/${userId}.json?auth=${token}`, {
+        await axios.put(`${URLbase}/coaches/${userId}.json?auth=${token}`, {
           coachData,
         });
-        console.log(response);
       } catch (error) {
         console.error(error);
       }
@@ -64,13 +63,11 @@ export default {
       context.commit("registerCoach", { ...coachData, id: userId });
     },
     async loadCoaches(context, payload) {
-      if(!payload.forceRefresh && !context.getters.shouldUpdate){
+      if (!payload.forceRefresh && !context.getters.shouldUpdate) {
         return;
       }
 
       const response = await axios.get(`${URLbase}/coaches.json`);
-      console.log(response);
-
       const responseData = await response.data;
 
       if (response.status !== 200) {

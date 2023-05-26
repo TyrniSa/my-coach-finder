@@ -2,7 +2,7 @@
   <header>
     <nav>
       <h1 v-if="isLoggedIn"><RouterLink to="/">Hello {{ this.$store.getters.email }}!</RouterLink></h1>
-      <h1 v-else><RouterLink to="/">Find a Coach</RouterLink></h1>
+      <h1 v-else><RouterLink to="/">Find a Coach ✏️</RouterLink></h1>
       <ul>
         <li>
           <RouterLink to="/coaches">Coaches</RouterLink>

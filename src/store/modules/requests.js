@@ -29,7 +29,6 @@ export default {
           newRequest,
         }
       );
-      console.log(response);
 
       if (response.status !== 200) {
         const error = new Error(response.message || "Failed to send request.");
@@ -44,8 +43,9 @@ export default {
     async fetchRequests(context) {
       const coachId = context.rootGetters.userId;
       const token = context.rootGetters.token;
-      const response = await axios.get(`${URLbase}/requests/${coachId}.json?auth=${token}`);
-      console.log(response);
+      const response = await axios.get(
+        `${URLbase}/requests/${coachId}.json?auth=${token}`
+      );
 
       const responseData = await response.data;
 
