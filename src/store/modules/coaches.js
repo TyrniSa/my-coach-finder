@@ -50,8 +50,10 @@ export default {
         areas: data.areas,
       };
 
+      const token = context.rootGetters.token;
+
       try {
-        const response = await axios.put(`${URLbase}/coaches/${userId}.json`, {
+        const response = await axios.put(`${URLbase}/coaches/${userId}.json?auth=${token}`, {
           coachData,
         });
         console.log(response);

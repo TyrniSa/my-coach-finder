@@ -43,7 +43,8 @@ export default {
     },
     async fetchRequests(context) {
       const coachId = context.rootGetters.userId;
-      const response = await axios.get(`${URLbase}/requests/${coachId}.json`);
+      const token = context.rootGetters.token;
+      const response = await axios.get(`${URLbase}/requests/${coachId}.json?auth=${token}`);
       console.log(response);
 
       const responseData = await response.data;
