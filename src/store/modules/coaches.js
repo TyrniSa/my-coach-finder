@@ -5,25 +5,26 @@ export default {
   namespaced: true,
   state() {
     return {
+      lastFetch: null,
       coaches: [
-        {
-          id: "c1",
-          firstName: "Maximilian",
-          lastName: "Schwarzmüller",
-          areas: ["frontend", "backend", "career"],
-          description:
-            "I'm Maximilian and I've worked as a freelance web developer for years. Let me help you become a developer as well!",
-          hourlyRate: 30,
-        },
-        {
-          id: "c2",
-          firstName: "Julie",
-          lastName: "Jones",
-          areas: ["frontend", "career"],
-          description:
-            "I am Julie and as a senior developer in a big tech company, I can help you get your first job or progress in your current role.",
-          hourlyRate: 30,
-        },
+        // {
+        //   id: "c1",
+        //   firstName: "Maximilian",
+        //   lastName: "Schwarzmüller",
+        //   areas: ["frontend", "backend", "career"],
+        //   description:
+        //     "I'm Maximilian and I've worked as a freelance web developer for years. Let me help you become a developer as well!",
+        //   hourlyRate: 30,
+        // },
+        // {
+        //   id: "c2",
+        //   firstName: "Julie",
+        //   lastName: "Jones",
+        //   areas: ["frontend", "career"],
+        //   description:
+        //     "I am Julie and as a senior developer in a big tech company, I can help you get your first job or progress in your current role.",
+        //   hourlyRate: 30,
+        // },
       ],
     };
   },
@@ -33,6 +34,9 @@ export default {
     },
     setCoaches(state, payload) {
       state.coaches = payload;
+    },
+    setFetchTimestamp(state) {
+      state.lastFetch = new Date().getTime();
     },
   },
   actions: {
@@ -57,7 +61,11 @@ export default {
 
       context.commit("registerCoach", { ...coachData, id: userId });
     },
-    async loadCoaches(context) {
+    async loadCoaches(context, payload) {
+      if(!payload.forceRefresh && !context.getters.shouldUpdate){
+        return;
+      }
+
       const response = await axios.get(`${URLbase}/coaches.json`);
       console.log(response);
 
@@ -84,6 +92,7 @@ export default {
       }
 
       context.commit("setCoaches", coaches);
+      context.commit("setFetchTimestamp");
     },
   },
   getters: {
@@ -97,6 +106,14 @@ export default {
       const coaches = getters.coaches;
       const userId = rootGetters.userId;
       return coaches.some((c) => c.id === userId);
+    },
+    shouldUpdate(state) {
+      const lastFetch = state.lastFetch;
+      if (!lastFetch) {
+        return true;
+      }
+      const currentTimestamp = new Date().getTime();
+      return (currentTimestamp - lastFetch) / 1000 > 60;
     },
   },
 };
