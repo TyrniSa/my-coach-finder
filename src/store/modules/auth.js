@@ -5,7 +5,7 @@ let timer;
 export default {
   state() {
     return {
-      email: "",
+      email: null,
       userId: null,
       token: null,
       didAutoLogout: false,
@@ -62,7 +62,7 @@ export default {
       //   const expiresIn = 5000;
       // to test autoLogout in 5sek
       const expirationDate = new Date().getTime() + expiresIn;
-
+      localStorage.setItem("email", responseData.email);
       localStorage.setItem("token", responseData.idToken);
       localStorage.setItem("userId", responseData.localId);
       localStorage.setItem("tokenExpiration", expirationDate);
@@ -80,6 +80,7 @@ export default {
     tryLogin(context) {
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("userId");
+      const email = localStorage.getItem("email");
       const tokenExpiration = localStorage.getItem("tokenExpiration");
 
       const expiresIn = +tokenExpiration - new Date().getTime();
@@ -96,12 +97,14 @@ export default {
         context.commit("setUser", {
           token: token,
           userId: userId,
+          email: email
         });
       }
     },
     logout(context) {
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
+      localStorage.removeItem("email");
       localStorage.removeItem("tokenExpiration");
 
       clearTimeout(timer);
@@ -109,6 +112,7 @@ export default {
       context.commit("setUser", {
         token: null,
         userId: null,
+        email: null
       });
     },
     autoLogout(context) {

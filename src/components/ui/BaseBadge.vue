@@ -26,17 +26,23 @@ export default {
 }
 
 .frontend {
-  background-color: #3d008d;
+  background-color: #00AF91;
   color: white;
 }
 
 .backend {
-  background-color: #71008d;
+  background-color: #007965;
   color: white;
 }
 
 .career {
-  background-color: #8d006e;
+  background-color: #F58634;
   color: white;
+}
+@media screen and (max-width: 650px) {
+  .badge {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+}
 }
 </style>

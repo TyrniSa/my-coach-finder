@@ -141,17 +141,17 @@ textarea {
 
 input:focus,
 textarea:focus {
-  border-color: #3d008d;
-  background-color: #faf6ff;
+  border-color: #007965;
+  background-color: #f6fffd;
   outline: none;
 }
 .signup {
-  border-color: #f391e3;
-  background-color: #f391e3;
+  border-color: #ffae00;
+  background-color: #ffae00;
 }
 .signup:hover,
 .signup:active {
-  border-color: #e972d5;
-  background-color: #e972d5;
+  border-color: #FFCC29;
+  background-color: #FFCC29;
 }
 </style>

@@ -198,9 +198,9 @@ textarea {
 
 input:focus,
 textarea:focus {
-  background-color: #f0e6fd;
+  background-color: #f6fffd;
   outline: none;
-  border-color: #3d008d;
+  border-color: #007965;
 }
 
 h3 {
@@ -241,7 +241,7 @@ h3 {
 }
 
 .container input:checked ~ .checkmark {
-  background-color: #3a0061;
+  background-color: #007965;
 }
 
 .checkmark:after {

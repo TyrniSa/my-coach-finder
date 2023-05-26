@@ -1,7 +1,9 @@
 <template>
   <header>
     <nav>
-      <h1 v-if="isLoggedIn"><RouterLink to="/">Hello {{ this.$store.getters.email }}!</RouterLink></h1>
+      <h1 v-if="isLoggedIn">
+        <RouterLink to="/">Hello {{ this.$store.getters.email }}!</RouterLink>
+      </h1>
       <h1 v-else><RouterLink to="/">Find a Coach ✏️</RouterLink></h1>
       <ul>
         <li>
@@ -24,23 +26,23 @@
 <script>
 export default {
   computed: {
-    isLoggedIn(){
+    isLoggedIn() {
       return this.$store.getters.isAuthenticated;
-    }
+    },
   },
   methods: {
     logout() {
-      this.$store.dispatch('logout'); 
-    }
+      this.$store.dispatch("logout");
+    },
   },
-}
+};
 </script>
 
 <style scoped>
 header {
   width: 100%;
   height: 5rem;
-  background-color: #3d008d;
+  background-color: #007965;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,7 +50,7 @@ header {
 
 header a {
   text-decoration: none;
-  color: #f391e3;
+  color: #FFCC29;
   display: inline-block;
   padding: 0.75rem 1.5rem;
   border: 1px solid transparent;
@@ -57,7 +59,7 @@ header a {
 a:active,
 a:hover,
 a.router-link-active {
-  border: 1px solid #f391e3;
+  border: 1px solid #FFCC29;
 }
 
 h1 {
@@ -95,13 +97,32 @@ header ul {
 li {
   margin: 0 0.5rem;
 }
-.logout{
+.logout {
   background-color: transparent;
 }
 .logout:active,
-.logout:hover{
+.logout:hover {
   background-color: transparent;
   border-radius: 0;
-  border: 1px solid #f391e3;
+  border: 1px solid #FFCC29;
+}
+@media screen and (max-width: 650px) {
+  header {
+    height: 7rem;
+  }
+  header h1 {
+    font-size: 1.5rem;
+  }
+  header nav {
+    width: 100%;
+    flex-direction: column;
+  }
+  header a{
+  padding: 0.5rem 1rem;
+  }
+
+  li {
+    margin: 0;
+  }
 }
 </style>

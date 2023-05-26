@@ -10,7 +10,7 @@ footer {
   height: 2rem;
   position: fixed;
   bottom: 0;
-  background-color: #3d008d;
+  background-color: #007965;
   display: flex;
   padding-left: 1rem;
   align-items: center;
@@ -19,7 +19,7 @@ footer {
 }
 a {
   text-decoration: none;
-  color: #f391e3;
+  color: #FFCC29;
   display: inline-block;
 }
 a:active,

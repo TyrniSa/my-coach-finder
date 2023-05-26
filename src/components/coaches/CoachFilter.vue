@@ -55,23 +55,6 @@ h2 {
   margin: 0.5rem 0;
 }
 
-/* .filter-option {
-  margin-right: 1rem;
-}
-
-.filter-option label,
-.filter-option input {
-  vertical-align: middle;
-}
-
-.filter-option label {
-  margin-left: 0.25rem;
-}
-
-.filter-option.active label {
-  font-weight: bold;
-} */
-
 .container {
   display: block;
   position: relative;
@@ -105,7 +88,7 @@ h2 {
 }
 
 .container input:checked ~ .checkmark {
-  background-color: #3a0061;
+  background-color: #007965;
 }
 
 .checkmark:after {
