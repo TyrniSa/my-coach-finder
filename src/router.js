@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
+import store from "./store";
 
 import CoachDetails from "./pages/coaches/CoachDetails";
-import CoachesList from "./pages/coaches/CoachesList";
-import CoachRegisteration from "./pages/coaches/CoachRegisteration";
+import CoachRegistration from "./pages/coaches/CoachRegisteration";
 import ContactCoach from "./pages/requests/ContactCoach";
-import RequestReceived from "./pages/requests/RequestsReceived";
-import NotFound from "./pages/NotFound";
+import RequestsReceived from "./pages/requests/RequestsReceived";
 import UserAuth from "./pages/auth/UserAuth";
-import store from "./store";
+import NotFound from "./pages/NotFound";
+import CoachesList from "./pages/coaches/CoachesList";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -24,12 +24,12 @@ const router = createRouter({
     },
     {
       path: "/register",
-      component: CoachRegisteration,
+      component: CoachRegistration,
       meta: { requiresAuth: true },
     },
     {
       path: "/requests",
-      component: RequestReceived,
+      component: RequestsReceived,
       meta: { requiresAuth: true },
     },
     { path: "/auth", component: UserAuth, meta: { requiresUnauth: true } },
