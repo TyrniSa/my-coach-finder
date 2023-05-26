@@ -21,7 +21,7 @@
           Please enter a valid email and password, password needs to be at least
           6 characters long.
         </p>
-        <base-button>{{ submitButtonCaption }}</base-button>
+        <base-button :class="{ 'signup': this.mode !== 'login'}">{{ submitButtonCaption }}</base-button>
         <base-button type="button" mode="flat" @click="switchAuthMode">{{
           switchModeButtonCaption
         }}</base-button>
@@ -83,6 +83,8 @@ export default {
         } else {
           await this.$store.dispatch("signup", actionPayload);
         }
+        const redirectUrl = '/' + (this.$route.query.redirect || 'coaches');
+        this.$router.replace(redirectUrl);
       } catch (error) {
         this.error =
           error.message || "Failed to authenticate. Check your login data.";
@@ -134,5 +136,14 @@ textarea:focus {
   border-color: #3d008d;
   background-color: #faf6ff;
   outline: none;
+}
+.signup{
+    border-color: #f391e3;
+    background-color: #f391e3;
+}
+.signup:hover,
+.signup:active {
+    border-color: #e972d5;
+    background-color: #e972d5;
 }
 </style>

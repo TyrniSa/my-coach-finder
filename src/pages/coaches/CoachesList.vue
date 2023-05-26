@@ -9,16 +9,17 @@
     </base-dialog>
     <section><CoachFilter @change-filter="setFilters" /></section>
     <section>
-      <BaseCard>
+      <base-card>
         <div class="controls">
-          <BaseButton mode="outline" @click="loadCoaches(true)"
-            >Refresh</BaseButton
-          >
-          <BaseButton v-if="!isCoach && !isLoading" link to="/register"
-            >Register as Coach</BaseButton
-          >
+          <base-button mode="outline" @click="loadCoaches(true)">
+            Refresh
+          </base-button>
+          <base-button link to="/auth?redirect=register" v-if="!isLoggedIn">Login to register as Coach</base-button>
+          <base-button v-if="isLoggedIn && !isCoach && !isLoading" link to="/register">
+            Register as Coach
+          </base-button>
         </div>
-        <div v-if="isLoading"><BaseSpinner /></div>
+        <div v-if="isLoading"><base-spinner /></div>
         <ul v-else-if="hasCoaches">
           <CoachItem
             v-for="coach in filteredCoaches"
@@ -33,25 +34,19 @@
           </CoachItem>
         </ul>
         <h3 v-else>No coaches yet!</h3>
-      </BaseCard>
+      </base-card>
     </section>
   </div>
 </template>
 
 <script>
-import BaseCard from "@/components/ui/BaseCard.vue";
 import CoachItem from "../../components/coaches/CoachItem.vue";
-import BaseButton from "@/components/ui/BaseButton.vue";
 import CoachFilter from "@/components/coaches/CoachFilter.vue";
-import BaseSpinner from "@/components/ui/BaseSpinner.vue";
 
 export default {
   components: {
     CoachItem,
-    BaseCard,
-    BaseButton,
     CoachFilter,
-    BaseSpinner,
   },
   data() {
     return {
@@ -65,6 +60,9 @@ export default {
     };
   },
   computed: {
+    isLoggedIn(){
+      return this.$store.getters.isAuthenticated;
+    },
     isCoach() {
       return this.$store.getters["coaches/isCoach"];
     },

@@ -1,18 +1,40 @@
 <template>
   <header>
     <nav>
-      <h1><RouterLink to="/">Find a Coach</RouterLink></h1>
+      <h1 v-if="isLoggedIn"><RouterLink to="/">Hello {{ this.$store.getters.email }}!</RouterLink></h1>
+      <h1 v-else><RouterLink to="/">Find a Coach</RouterLink></h1>
       <ul>
         <li>
           <RouterLink to="/coaches">Coaches</RouterLink>
         </li>
-        <li>
+        <li v-if="isLoggedIn">
           <RouterLink to="/requests">Requests</RouterLink>
+        </li>
+        <li v-else>
+          <RouterLink to="/auth">Login/Signup</RouterLink>
+        </li>
+        <li v-if="isLoggedIn">
+          <base-button @click="logout" link class="logout">Logout</base-button>
         </li>
       </ul>
     </nav>
   </header>
 </template>
+
+<script>
+export default {
+  computed: {
+    isLoggedIn(){
+      return this.$store.getters.isAuthenticated;
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout'); 
+    }
+  },
+}
+</script>
 
 <style scoped>
 header {
@@ -72,5 +94,14 @@ header ul {
 
 li {
   margin: 0 0.5rem;
+}
+.logout{
+  background-color: transparent;
+}
+.logout:active,
+.logout:hover{
+  background-color: transparent;
+  border-radius: 0;
+  border: 1px solid #f391e3;
 }
 </style>
